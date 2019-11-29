@@ -12,11 +12,33 @@ export default class Card extends React.Component {
       const newName = prompt('New card text')
       this.name = newName;
     }
+
+    onDragStart = (ev, name) => {
+      console.log('dragstart:',name);
+      ev.dataTransfer.setData("nameCard", name);
+  }
+
+  onDrop = (ev, cat) => {
+    let id = ev.dataTransfer.getData("nameCard");
+    
+    let tasks = this.state.tasks.filter((task) => {
+        if (task.name == id) {
+            task.category = cat;
+        }
+        return task;
+    });
+
+    this.setState({
+        ...this.state,
+        tasks
+    });
+ }
+
   
     render() {
       if (this.props.isVisible){
         return (
-          <div>
+          <div draggable="true" onDragStart={(e) => this.onDragStart(e, this.props.name)}>
           <button className="square" id="cardTitle" >
             {this.props.name}
           </button>

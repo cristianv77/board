@@ -48,6 +48,18 @@ body {
     width: 150px;
   }
 
+  .column-drop {
+    background: #fff;
+    float: left;
+    height: 100%;
+    margin-right: -1px;
+    margin-top: -1px;
+    margin-left: 20px;
+    padding: 0;
+    text-align: center;
+    width: 50px;
+  }
+
   .square:focus {
     outline: none;
   }
@@ -69,3 +81,7 @@ body {
       width: 150px;
       margin-left: 20px;
   }
+
+  /*.column-board {
+    display:flex;
+  }*/
