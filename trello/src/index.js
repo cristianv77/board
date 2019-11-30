@@ -9,7 +9,6 @@ export default class Card extends React.Component {
   }
 
   render() {
-    if (this.props.isVisible){
       return (
         
         <button className="square" id="cardTitle" >
@@ -17,8 +16,6 @@ export default class Card extends React.Component {
         </button>
       );
     }
-    return (<div></div>);
-  }
 }
 
 class Column extends React.Component {
@@ -95,14 +92,11 @@ class Column extends React.Component {
   }
 
   onDragStart = (ev, name, column) => {
-    console.log('dragstart:',name,column);
     ev.dataTransfer.setData("nameCard", name);
     ev.dataTransfer.setData("columnCard", column);
-    console.log(name)  
   }
 
   onDragStartColumn = (ev, column) => {
-    console.log('dragstart:',column);
     ev.dataTransfer.setData("columnCard", column);
     localStorage.setItem('ColumnDrag',column)
   }
@@ -187,16 +181,12 @@ class Board extends React.Component {
 
   searchCards(){
     const searchWords = document.getElementById('search').value.toLowerCase()
-    console.log(searchWords)
     cardsInBoard.map(card => {
       const nameLow = card.name.toLowerCase();
-      console.log(nameLow)
       if (nameLow.includes(searchWords)){
-        console.log('find', nameLow)
         card.visible = true;
       } else {
         card.visible = false;
-        console.log('not find', nameLow)
       }
       return '';
     })
