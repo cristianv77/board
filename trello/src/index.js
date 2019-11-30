@@ -143,7 +143,7 @@ class Column extends React.Component {
       return (<div className="board-row" key={Math.random()} >
         <div draggable="true" onDragEnd={(e) => this.onDragEnd(e, name, this.props.title)} onDragStart={(e) => this.onDragStart(e, name, this.props.title)}>
         <Card name={name} isVisible={true} column={this.props.title}/>
-        <button onClick={() => this.archiveCard(name)}>Archive</button>
+        <button draggable="false" onClick={() => this.archiveCard(name)}>Archive</button>
         <button onClick={() => this.editCard(name)}>Edit text</button>
         <button onClick={() => this.duplicateCard(name)}>Duplicate card</button>
         </div>
@@ -151,9 +151,9 @@ class Column extends React.Component {
 
     return (
       <div id="Column" className="column" draggable="true" onDragStart={(e)=> this.onDragStartColumn(e, this.props.title)} onDragOver={(e)=>this.onDragOver(e)} onDrop={(e)=>{this.onDrop(e, this.props.title)}} >
-        <div className="status" >{this.props.title}</div>
+        <div className="titleColumn" >{this.props.title}</div>
         {renderCards}
-        <button onClick={this.addCard}>Add Card</button>
+        <button id="button-add-card" onClick={this.addCard}>Add Card</button>
       </div>
     );
   }
@@ -182,11 +182,38 @@ class Board extends React.Component {
     this.archiveColumn = this.archiveColumn.bind(this);
     this.editTitle = this.editTitle.bind(this);
     this.searchCards = this.searchCards.bind(this);
-    
+    this.resetFilter = this.resetFilter.bind(this);
   }
 
   searchCards(){
+    const searchWords = document.getElementById('search').value.toLowerCase()
+    console.log(searchWords)
+    cardsInBoard.map(card => {
+      const nameLow = card.name.toLowerCase();
+      console.log(nameLow)
+      if (nameLow.includes(searchWords)){
+        console.log('find', nameLow)
+      } else {
+        card.visible = false;
+        console.log('not find', nameLow)
+      }
+      return '';
+    })
+    localStorage.setItem('cardsInBoard',JSON.stringify(cardsInBoard));
+    this.setState({
+      cards: cardsInBoard,
+    })
+  }
 
+  resetFilter(){
+    cardsInBoard.map(card => {
+      card.visible = true;
+      return '';
+    })
+    localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
+    this.setState({
+      cards: cardsInBoard,
+    })
   }
 
   addColumn(){
@@ -230,14 +257,15 @@ class Board extends React.Component {
       columns: columnsInBoard,
       cards: cardsInBoard
     })
-  }
+  };
 
   onDrop = (ev, newColumn) => {
   const newList = columnsInBoard;
   const column = localStorage.getItem('ColumnDrag');
   const indexActual = this.state.columns.indexOf(column)
   const indexNew = this.state.columns.indexOf(newColumn)
-  
+  //alert(indexActual)
+  //alert(indexNew)
   if(newColumn === 0){
     newList.splice(indexActual,1)
     newList.splice(0,0,column);
@@ -245,9 +273,9 @@ class Board extends React.Component {
     if (indexActual < indexNew){
     newList.splice(indexActual,1)
     newList.splice(indexNew,0,column);
-    } else {
+    } else if (indexActual > indexNew){
       newList.splice(indexActual,1)
-    newList.splice(indexNew+1,0,column);
+      newList.splice(indexNew+1,0,column);
     }
   }
   localStorage.setItem('columnsInBoard', columnsInBoard);
@@ -264,7 +292,7 @@ class Board extends React.Component {
     const ListOfCards = name => {
       const list = [];
       cardsInBoard.map (card => {
-        if (card.title === name){
+        if (card.title === name && card.visible){
           list.push(card.name)
           return '';
         }
@@ -288,20 +316,23 @@ class Board extends React.Component {
   
 
     return (
-      <div className="container-drag, game">
+      <div className="container-drag, board">
+        <div className="board-info">
+        <input id="search" placeholder="Search"></input>
+        <button onClick={this.searchCards}>{'Search cards'}</button>
+        <button onClick={this.resetFilter}>{'Reset filter'}</button>
+        <br></br>
+        <br></br>
+          <form onSubmit={this.addColumn}>
+            <input id="newColumn" placeholder="New column title"></input>
+            <button type="submit">{'Add column'}</button>
+          </form>
+        </div>
         <div className="columns" id="columns">
         <div className="Dropabble, column-drop" id={0} key={0} onDragOver={(e) => this.onDragOver(e)} onDrop={(e) => this.onDrop(e,0)}></div>
           {renderColumns}
         </div>
-        <div className="game-info">
-        <input id="search" placeholder="Search..."></input>
-        <button onClick={this.searchCards}>{'Search cards'}</button>
-        <br></br>
-        <br></br>
-        <br></br>
-          <input id="newColumn" placeholder="New column title"></input>
-          <button onClick={this.addColumn}>{'Add column'}</button>
-        </div>
+        
       </div>
     );
   }
