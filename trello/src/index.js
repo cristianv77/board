@@ -193,6 +193,7 @@ class Board extends React.Component {
       console.log(nameLow)
       if (nameLow.includes(searchWords)){
         console.log('find', nameLow)
+        card.visible = true;
       } else {
         card.visible = false;
         console.log('not find', nameLow)
@@ -210,6 +211,7 @@ class Board extends React.Component {
       card.visible = true;
       return '';
     })
+    document.getElementById("newColumn").innerHTML='';
     localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
     this.setState({
       cards: cardsInBoard,
@@ -318,7 +320,7 @@ class Board extends React.Component {
     return (
       <div className="container-drag, board">
         <div className="board-info">
-        <input id="search" placeholder="Search"></input>
+        <input onChange={this.searchCards} id="search" placeholder="Search"></input>
         <button onClick={this.searchCards}>{'Search cards'}</button>
         <button onClick={this.resetFilter}>{'Reset filter'}</button>
         <br></br>
