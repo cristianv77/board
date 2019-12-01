@@ -1,37 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-
-export default class Card extends React.Component {
-  constructor(props) {
-    super(props);
-    this.name = this.props.name;
-  }
-
-  render() {
-      return (
-        
-        <button className="square" id="cardTitle" >
-          {this.props.name}
-        </button>
-      );
-    }
-}
+import open from './Modal';
+import Card from './Card';
 
 class Column extends React.Component {
   constructor(props) {
     super(props);
     this.addCard = this.addCard.bind(this);
     this.archiveCard = this.archiveCard.bind(this);
-    this.editCard = this.editCard.bind(this);
     this.state = {
       cards: this.props.cards,
     };
   }
 
   addCard(){
-    const newCard = prompt('Name the new card');
-    const card = {name:newCard, title:this.props.title};
+    const idAddCard = 'AddCard'+this.props.title;
+    const newCard = document.getElementById(idAddCard).value;
+    
+    const card = {name:newCard, title:this.props.title,visible:true};
     const actualCards = this.state.cards
     cardsInBoard.push(card);
     actualCards.push(newCard);
@@ -43,7 +30,7 @@ class Column extends React.Component {
 
   duplicateCard(name){
     const newCard = name;
-    const card = {name:newCard, title:this.props.title};
+    const card = {name:newCard, title:this.props.title, visible:true};
     const actualCards = this.state.cards
     cardsInBoard.push(card);
     actualCards.push(newCard);
@@ -63,24 +50,6 @@ class Column extends React.Component {
     }
     cardsInBoard.splice(index,1);
     actualCards.splice(actualCards.indexOf(name),1);
-    localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
-    this.setState({
-      cards: actualCards
-    })
-  }
-
-  editCard(name){
-    const newCard = prompt('Name the new card');
-    const card = {name:newCard, title:this.props.title};
-    const actualCards = this.state.cards
-    let index;
-    for (const i in cardsInBoard){
-      if (cardsInBoard[i].title === this.props.title && cardsInBoard[i].name === name){
-        index = i;
-      }
-    }
-    cardsInBoard[index] = card;
-    actualCards[actualCards.indexOf(name)] =  newCard
     localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
     this.setState({
       cards: actualCards
@@ -132,22 +101,40 @@ class Column extends React.Component {
 }
 }
 
+openModal(editType, name, cardName){
+  open(editType,name, cardName)
+}
+
   render() {
     const renderCards = this.state.cards.map(name => {
       return (<div className="board-row" key={Math.random()} >
         <div draggable="true" onDragEnd={(e) => this.onDragEnd(e, name, this.props.title)} onDragStart={(e) => this.onDragStart(e, name, this.props.title)}>
         <Card name={name} isVisible={true} column={this.props.title}/>
-        <button draggable="false" onClick={() => this.archiveCard(name)}>Archive</button>
-        <button onClick={() => this.editCard(name)}>Edit text</button>
-        <button onClick={() => this.duplicateCard(name)}>Duplicate card</button>
+        <button draggable="false" onClick={() => this.archiveCard(name)} id="BtnActions">Archive</button>
+        <button onClick={() => this.openModal('EditCard',this.props.title,name)} id="BtnActions">Edit text</button>
+        <button onClick={() => this.duplicateCard(name)} id="BtnActions">Duplicate card</button>
         </div>
       </div>)})
 
+    const title = () => {
+      
+      const titleAux = this.props.title;
+      console.log(titleAux);
+      //String(titleAux).includes
+      if (titleAux.includes('_')){
+        return titleAux.split('_')[1];
+      }
+      return titleAux;
+    }
+    const idAddCard = 'AddCard'+this.props.title;
     return (
       <div id="Column" className="column" draggable="true" onDragStart={(e)=> this.onDragStartColumn(e, this.props.title)} onDragOver={(e)=>this.onDragOver(e)} onDrop={(e)=>{this.onDrop(e, this.props.title)}} >
-        <div className="titleColumn" >{this.props.title}</div>
+        <div className="titleColumn" >{title()}</div>
         {renderCards}
-        <button id="button-add-card" onClick={this.addCard}>Add Card</button>
+        <form onSubmit={this.addCard}>
+          <input className="addCardInput" id={idAddCard} placeholder="New Card" required></input>
+          <button id="button-add-card" >Add Card</button>
+        </form>
       </div>
     );
   }
@@ -171,12 +158,13 @@ class Board extends React.Component {
     this.state = {
       columns: columnsBoard(),
       cards: cardsBoard(),
+      duplicate: 1
     };
     this.addColumn = this.addColumn.bind(this);
     this.archiveColumn = this.archiveColumn.bind(this);
     this.editTitle = this.editTitle.bind(this);
     this.searchCards = this.searchCards.bind(this);
-    this.resetFilter = this.resetFilter.bind(this);
+    this.save = this.save.bind(this);
   }
 
   searchCards(){
@@ -196,17 +184,6 @@ class Board extends React.Component {
     })
   }
 
-  resetFilter(){
-    cardsInBoard.map(card => {
-      card.visible = true;
-      return '';
-    })
-    document.getElementById("newColumn").innerHTML='';
-    localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
-    this.setState({
-      cards: cardsInBoard,
-    })
-  }
 
   addColumn(){
     const newColumnTitle = document.getElementById("newColumn").value;
@@ -218,25 +195,53 @@ class Board extends React.Component {
   }
 
   duplicateColumn(name){
-    const newColumnTitle = name;
-    columnsInBoard.splice(columnsInBoard.indexOf(name), 0, newColumnTitle);
+    
+    const dupl = this.state.duplicate;
+    const newColumnTitle = 'v'+dupl+'_'+name;
+    columnsInBoard.splice(columnsInBoard.indexOf(name)+1, 0, newColumnTitle);
     //columnsInBoard.push(newColumnTitle)
+    cardsInBoard.map(card => {
+      if (card.title === name){
+        cardsInBoard.push({name:card.name, title:newColumnTitle, visible:true})
+      } 
+      return '';
+    })
     localStorage.setItem('columnsInBoard', columnsInBoard);
+    localStorage.setItem('cardsInBoard',JSON.stringify(cardsInBoard));
     this.setState({
-      columns: columnsInBoard
+      columns: columnsInBoard,
+      cardsInBoard: cardsInBoard,
+      duplicate: dupl+1
     })
   }
 
   archiveColumn(name){
+    console.log(JSON.stringify(cardsInBoard))
+    const indexes = [];
+    cardsInBoard.map(card => {
+      if (card.title === name){
+        indexes.unshift(cardsInBoard.indexOf(card))
+      } 
+      return '';
+    })
+
+    indexes.map(i => {
+      cardsInBoard.splice(i,1)
+      return '';
+    }
+    )
+    
     columnsInBoard.splice( columnsInBoard.indexOf(name), 1 );
     localStorage.setItem('columnsInBoard', columnsInBoard);
+    localStorage.setItem('cardsInBoard',JSON.stringify(cardsInBoard));
     this.setState({
-      columns: columnsInBoard
+      columns: columnsInBoard,
+      cards: cardsInBoard
     })
   }
 
-  editTitle(name){
-    const newTitle = prompt('New title');
+  editTitle(name, newTitle){
+    //const newTitle = prompt('New title');
     columnsInBoard[columnsInBoard.indexOf(name)] =  newTitle
     localStorage.setItem('columnsInBoard', columnsInBoard);
     for (const i in cardsInBoard){
@@ -250,6 +255,22 @@ class Board extends React.Component {
       cards: cardsInBoard
     })
   };
+
+  editCard(title, name, newCard){
+    if (newCard !== '' && newCard !== null){
+    const card = {name:newCard, title:title, visible:true};
+    let index;
+    for (const i in cardsInBoard){
+      if (cardsInBoard[i].title === title && cardsInBoard[i].name === name){
+        index = i;
+      }
+    }
+    cardsInBoard[index] = card;
+    localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
+    this.setState({
+      cards: cardsInBoard
+    })
+  }}
 
   onDrop = (ev, newColumn) => {
   const newList = columnsInBoard;
@@ -276,6 +297,28 @@ class Board extends React.Component {
     })
   }
 
+  openModal(editType, name){
+    open(editType,name)
+  }
+
+  save(){
+    const editElement = JSON.parse(localStorage.getItem('Edit'));
+    const edit = document.getElementById('edit');  
+    if (editElement.editType === 'EditTitle'){
+      this.editTitle(editElement.name, edit.value);
+    } else if (editElement.editType === 'EditCard'){
+      this.editCard(editElement.name, editElement.cardName, edit.value);
+    }
+    document.getElementById('modal').style.display = 'none';
+    edit.value='';
+  }
+
+  close(){
+    const edit = document.getElementById('edit');
+    document.getElementById('modal').style.display = 'none';
+    edit.value='';
+  }
+
   onDragOver = (ev) => {
     ev.preventDefault();
   }
@@ -297,9 +340,9 @@ class Board extends React.Component {
     const index = this.state.columns.indexOf(name) +1;
     return (<div className="column-board" key={Math.random()}>
       <div className="buttons-column">
-        <button onClick={() => this.editTitle(name)}>Edit title</button>
-        <button onClick={() => this.archiveColumn(name)}>Archive</button>
-        <button onClick={() => this.duplicateColumn(name)}>Duplicate</button>
+        <button onClick={() => this.openModal('EditTitle',name)} id="BtnActions">Edit title</button>
+        <button onClick={() => this.archiveColumn(name)} id="BtnActions">Archive</button>
+        <button onClick={() => this.duplicateColumn(name)} id="BtnActions">Duplicate</button>
       </div>
       <Column title={name} cards={ListOfCards(name)}/>
       <div className="Dropabble, column-drop" id={index} key={index} onDragOver={(e) => this.onDragOver(e)} onDrop={(e) => this.onDrop(e,name)}></div>
@@ -311,20 +354,29 @@ class Board extends React.Component {
       <div className="container-drag, board">
         <div className="board-info">
         <input onChange={this.searchCards} id="search" placeholder="Search"></input>
-        <button onClick={this.searchCards}>{'Search cards'}</button>
-        <button onClick={this.resetFilter}>{'Reset filter'}</button>
         <br></br>
         <br></br>
           <form onSubmit={this.addColumn}>
-            <input id="newColumn" placeholder="New column title"></input>
-            <button type="submit">{'Add column'}</button>
+            <input id="newColumn" placeholder="New column title" required></input>
+            <button type="submit">{'+'}</button>
           </form>
         </div>
         <div className="columns" id="columns">
+        <div className="column-board" key={Math.random()}>
         <div className="Dropabble, column-drop" id={0} key={0} onDragOver={(e) => this.onDragOver(e)} onDrop={(e) => this.onDrop(e,0)}></div>
+        </div>
           {renderColumns}
         </div>
-        
+        <div id="modal" className="modal" >
+      <div className="modal-header" id="divModalH">
+        <span className="close" id="closeModalBtn" onClick={this.close}>&times;</span>
+      </div>
+      <div className="modal-content">
+        <input placeholder="Edit" required id="edit"></input>
+        <br/>
+        <button id="buttonSave" onClick={this.save}>Save</button>
+      </div>
+    </div>
       </div>
     );
   }
