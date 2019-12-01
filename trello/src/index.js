@@ -459,9 +459,8 @@ if (!localStorage.getItem('columnsInBoard')) {
 
 let cardsInBoard = [
   { name: 'Go to CDS', title: 'To do', visible: true },
-  { name: 'Next interview', title: 'To do', visible: true },
   { name: 'Exam study', title: 'In progress', visible: true },
-  { name: 'This test', title: 'Done', visible: true }
+  { name: 'Pay accounts', title: 'Done', visible: true }
 ];
 if (!localStorage.getItem('cardsInBoard')) {
   localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
