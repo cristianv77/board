@@ -51,7 +51,7 @@ export default class Board extends React.Component {
     duplicateColumn(name) {
       const duplicate = this.state.duplicate;
       const actualColumns = this.state.columns;
-      const actualCards = this.state.cards;
+      const actualCards = JSON.parse(localStorage.getItem('cardsInBoard').split(','));
       const newColumnTitle = 'v' + duplicate + '_' + name;
       actualColumns.splice(actualColumns.indexOf(name) + 1, 0, newColumnTitle);
       actualCards.map(card => {
