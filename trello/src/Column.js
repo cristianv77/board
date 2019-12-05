@@ -14,11 +14,13 @@ export default class Column extends React.Component {
     };
   }
 
+  //Returns a card object
   parseCard(name, title) {
     const card = { name: name, title: title, visible: true };
     return card;
   }
 
+  //Adds a new card to the column
   addCard(name) {
     let newCard;
     if (name === "") {
@@ -39,6 +41,7 @@ export default class Column extends React.Component {
     });
   }
 
+  //Archives a card from a column
   archiveCard(name) {
     const actualCards = this.state.cards;
     let index;
@@ -59,6 +62,7 @@ export default class Column extends React.Component {
     });
   }
 
+  //DRAG METHODS
   onDragOver = event => {
     event.preventDefault();
   };
@@ -80,7 +84,9 @@ export default class Column extends React.Component {
       cards: actualCards
     });
   };
+  //END OF DRAG METHODS
 
+  //UPDATE COLUMN ELEMENTS
   onDrop = (event, newColumn) => {
     const name = event.dataTransfer.getData("nameCard");
     const column = event.dataTransfer.getData("columnCard");
@@ -108,18 +114,7 @@ export default class Column extends React.Component {
     }
   };
 
-  openModal(editType, name) {
-    open("modal", editType, name);
-  }
-
-  save() {
-    const editElement = JSON.parse(localStorage.getItem("Edit"));
-    const edit = document.getElementById("edit");
-    this.editTitle(editElement.name, edit.value);
-    document.getElementById("modal").style.display = "none";
-    edit.value = "";
-  }
-
+  //Edit columns title
   editTitle(name, newTitle) {
     const actualCards = JSON.parse(localStorage.getItem("cardsInBoard"));
     const actualColumns = localStorage.getItem("columnsInBoard").split(",");
@@ -135,9 +130,23 @@ export default class Column extends React.Component {
     window.location.reload(false);
   }
 
+  //MODAL METHODS  
+  openModal(editType, name) {
+    open("modal", editType, name);
+  }
+
+  save() {
+    const editElement = JSON.parse(localStorage.getItem("Edit"));
+    const edit = document.getElementById("edit");
+    this.editTitle(editElement.name, edit.value);
+    document.getElementById("modal").style.display = "none";
+    edit.value = "";
+  }
+
   closeModal() {
     close("modal", "edit");
   }
+  //END MODAL METHODS CALLS
 
   render() {
     const renderCards = this.state.cards.map(name => {

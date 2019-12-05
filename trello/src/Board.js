@@ -17,6 +17,7 @@ export default class Board extends React.Component {
       this.searchCards = this.searchCards.bind(this);
     }
   
+    //Search the word from the input element on the cards of the board. If it is found, the visibility is true. Else the visibility of the card is false
     searchCards() {
       const searchWords = document.getElementById('search').value.toLowerCase();
       const actualCards = this.state.cards;
@@ -35,6 +36,7 @@ export default class Board extends React.Component {
       });
     }
   
+    //Add a new column at the end of the board
     addColumn() {
       const actualColumns = this.state.columns;
       const newColumnTitle = document.getElementById('newColumn').value;
@@ -45,6 +47,7 @@ export default class Board extends React.Component {
       });
     }
   
+    //Duplicate a column next to it.
     duplicateColumn(name) {
       const duplicate = this.state.duplicate;
       const actualColumns = this.state.columns;
@@ -70,8 +73,9 @@ export default class Board extends React.Component {
       });
     }
   
+    //Archive a column and all the cards linked to this
     archiveColumn(name) {
-      const actualCards = this.state.cards;
+      const actualCards = JSON.parse(localStorage.getItem('cardsInBoard').split(','));
       const indexes = [];
       const actualColumns = this.state.columns;
       actualCards.map(card => {
@@ -95,8 +99,9 @@ export default class Board extends React.Component {
       });
     }
   
+    //It updates the order of the columns after the element is dropped
     onDrop = (event, newColumn) => {
-      const newList = this.state.columns;
+      const newList = localStorage.getItem('columnsInBoard').split(',')
       const column = localStorage.getItem('ColumnDrag');
       const indexActual = this.state.columns.indexOf(column);
       const indexNew = this.state.columns.indexOf(newColumn);
@@ -123,6 +128,7 @@ export default class Board extends React.Component {
     };
   
     render() {
+      //It returns a list of cards of a column in particular.
       const ListOfCards = name => {
         const cardsInBoard = this.state.cards;
         const list = [];

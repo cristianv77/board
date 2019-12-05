@@ -1,3 +1,4 @@
+// Initialize the cards of the board. It has an object with name, column and the visibility in the board
 export const initializeCards = () => {
     let cardsInBoard = [
       { name: 'Go to CDS', title: 'To do', visible: true },
@@ -12,6 +13,7 @@ export const initializeCards = () => {
     return cardsInBoard;
   }
 
+  // Initialize the columns of the board
   export const initializeColumns= () =>{
     let columnsInBoard = ['To do', 'In progress', 'Done'];
     if (!localStorage.getItem('columnsInBoard')) {
