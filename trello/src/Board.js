@@ -1,13 +1,12 @@
 import React from 'react';
 import './index.css';
-import { open, close } from './Modal'
 import Column from './Column'
 
 export default class Board extends React.Component {
     constructor(props) {
       super(props);
-      const columnsBoard = this.initializeColumns();
-      const cardsBoard = this.initializeCards();
+      const columnsBoard = localStorage.getItem('columnsInBoard').split(',');
+      const cardsBoard = JSON.parse(localStorage.getItem('cardsInBoard').split(','));
       this.state = {
         columns: columnsBoard,
         cards: cardsBoard,
@@ -15,33 +14,7 @@ export default class Board extends React.Component {
       };
       this.addColumn = this.addColumn.bind(this);
       this.archiveColumn = this.archiveColumn.bind(this);
-      this.editTitle = this.editTitle.bind(this);
       this.searchCards = this.searchCards.bind(this);
-      this.save = this.save.bind(this);
-    }
-  
-    initializeColumns(){
-      let columnsInBoard = ['To do', 'In progress', 'Done'];
-      if (!localStorage.getItem('columnsInBoard')) {
-       localStorage.setItem('columnsInBoard', columnsInBoard);
-      } else {
-        columnsInBoard = localStorage.getItem('columnsInBoard').split(',');
-      }
-      return columnsInBoard;
-    }
-  
-    initializeCards(){
-      let cardsInBoard = [
-        { name: 'Go to CDS', title: 'To do', visible: true },
-        { name: 'Exam study', title: 'In progress', visible: true },
-        { name: 'Pay accounts', title: 'Done', visible: true }
-      ];
-      if (!localStorage.getItem('cardsInBoard')) {
-        localStorage.setItem('cardsInBoard', JSON.stringify(cardsInBoard));
-      } else {
-        cardsInBoard = JSON.parse(localStorage.getItem('cardsInBoard').split(','));
-      }
-      return cardsInBoard;
     }
   
     searchCards() {
@@ -122,25 +95,6 @@ export default class Board extends React.Component {
       });
     }
   
-    editTitle(name, newTitle) {
-      const actualCards = this.state.cards;
-      const actualColumns = this.state.columns;
-      const index = actualColumns.indexOf(name);
-      actualColumns[index] = newTitle;
-      localStorage.setItem('columnsInBoard', actualColumns);
-      for (const card in actualCards) {
-        if (actualCards[card].title === name) {
-          actualCards[card].title = newTitle;
-        }
-      }
-      localStorage.setItem('cardsInBoard', JSON.stringify(actualCards));
-      this.setState({
-        columns: actualColumns,
-        cards: actualCards
-      });
-    }
-  
-  
     onDrop = (event, newColumn) => {
       const newList = this.state.columns;
       const column = localStorage.getItem('ColumnDrag');
@@ -164,23 +118,6 @@ export default class Board extends React.Component {
       });
     };
   
-    openModal(editType, name) {
-      open('modal',editType, name);
-    }
-  
-    save() {
-      const editElement = JSON.parse(localStorage.getItem('Edit'));
-      const edit = document.getElementById('edit');
-      this.editTitle(editElement.name, edit.value);
-      document.getElementById('modal').style.display = 'none';
-      edit.value = '';
-    }
-  
-    closeModal() {
-        close('modal','edit')
-    }
-    
-  
     onDragOver = event => {
         event.preventDefault();
     };
@@ -202,14 +139,9 @@ export default class Board extends React.Component {
       const renderColumns = this.state.columns.map(name => {
         const index = this.state.columns.indexOf(name) + 1;
         return (
+        <div key={index} className='column-dropzone' >
           <div className='column-board' key={Math.random()}>
             <div className='buttons-column'>
-              <button
-                onClick={() => this.openModal('EditTitle', name)}
-                id='BtnActions'
-              >
-                Edit title
-              </button>
               <button onClick={() => this.archiveColumn(name)} id='BtnActions'>
                 Archive
               </button>
@@ -218,13 +150,15 @@ export default class Board extends React.Component {
               </button>
             </div>
             <Column title={name} cards={ListOfCards(name)} />
-            <div
+          </div>
+          <div className='column-board'>
+          <div
               className='Dropabble, column-drop'
               id={index}
               key={index}
               onDragOver={e => this.onDragOver(e)}
               onDrop={e => this.onDrop(e, name)}
-            ></div>
+            ></div></div>
           </div>
         );
       });
@@ -250,29 +184,17 @@ export default class Board extends React.Component {
           </div>
           <div className='columns' id='columns'>
             <div className='column-board' key={Math.random()}>
+            <div className='column-dropzone' key={Math.random()}>
               <div
-                className='Dropabble, column-drop'
+                className='Dropabble, column-drop-first'
                 id={0}
                 key={0}
                 onDragOver={e => this.onDragOver(e)}
                 onDrop={e => this.onDrop(e, 0)}
               ></div>
             </div>
+            </div>
             {renderColumns}
-          </div>
-          <div id='modal' className='modal'>
-            <div className='modal-header' id='divModalH'>
-              <span className='close' id='closeModalBtn' onClick={this.closeModal}>
-                &times;
-              </span>
-            </div>
-            <div className='modal-content'>
-              <input placeholder='Edit' required id='edit'></input>
-              <br />
-              <button id='buttonSave' onClick={this.save}>
-                Save
-              </button>
-            </div>
           </div>
         </div>
       );
