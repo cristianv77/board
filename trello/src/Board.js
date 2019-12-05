@@ -103,6 +103,7 @@ export default class Board extends React.Component {
     onDrop = (event, newColumn) => {
       const newList = localStorage.getItem('columnsInBoard').split(',')
       const column = localStorage.getItem('ColumnDrag');
+      const cards = JSON.parse(localStorage.getItem('cardsInBoard')).split(',')
       const indexActual = this.state.columns.indexOf(column);
       const indexNew = this.state.columns.indexOf(newColumn);
       if (newColumn === 0) {
@@ -118,8 +119,10 @@ export default class Board extends React.Component {
         }
       }
       localStorage.setItem('columnsInBoard', newList);
+      localStorage.setItem('columnsInBoard', newList);
       this.setState({
-        columns: newList
+        columns: newList,
+        cards: cards
       });
     };
   
