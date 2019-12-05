@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import open from './Modal'
+import { open, close } from './Modal'
 import Column from './Column'
 
 export default class Board extends React.Component {
@@ -176,11 +176,10 @@ export default class Board extends React.Component {
       edit.value = '';
     }
   
-    close() {
-      const edit = document.getElementById('edit');
-      document.getElementById('modal').style.display = 'none';
-      edit.value = '';
+    closeModal() {
+        close('modal','edit')
     }
+    
   
     onDragOver = event => {
         event.preventDefault();
@@ -263,7 +262,7 @@ export default class Board extends React.Component {
           </div>
           <div id='modal' className='modal'>
             <div className='modal-header' id='divModalH'>
-              <span className='close' id='closeModalBtn' onClick={this.close}>
+              <span className='close' id='closeModalBtn' onClick={this.closeModal}>
                 &times;
               </span>
             </div>

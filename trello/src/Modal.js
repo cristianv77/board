@@ -1,9 +1,15 @@
-const open = (caller, editType, name, cardName) => {
+export const open = (caller, editType, name, cardName) => {
     const modal = document.getElementById(caller);
     const edit = document.getElementById("edit");
     modal.style.display = "block";
     localStorage.setItem('Edit', JSON.stringify({name:name, editType:editType, newName:edit.value,cardName:cardName}))
     return {name:name, editType:editType, newName:edit.value, cardName:cardName}
-  }
+  };
+
+  export const close = (caller, editer) => {
+    const edit = document.getElementById(editer);
+    document.getElementById(caller).style.display = 'none';
+    edit.value = '';
+  };
   
-  export default open;
+  export default { open, close };

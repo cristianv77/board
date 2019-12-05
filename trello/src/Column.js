@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import Card from './Card'
-import open from './Modal'
+import { open, close} from './Modal'
 
 export default class Column extends React.Component {
     constructor(props) {
@@ -133,10 +133,8 @@ export default class Column extends React.Component {
       open('modalColumn',editType, name, cardName);
     }
 
-    close() {
-        const edit = document.getElementById('editCol');
-        document.getElementById('modalColumn').style.display = 'none';
-        edit.value = '';
+    closeModal() {
+        close('modalColumn', 'editCol');
       }
   
     render() {
@@ -202,7 +200,7 @@ export default class Column extends React.Component {
           </form>
           <div id='modalColumn' className='modal'>
             <div className='modal-header' id='divModalH'>
-              <span className='close' id='closeModalBtn' onClick={this.close}>
+              <span className='close' id='closeModalBtn' onClick={this.closeModal}>
                 &times;
               </span>
             </div>
