@@ -73,10 +73,10 @@ export default class Board extends React.Component {
     }
   
     duplicateColumn(name) {
-      const dupl = this.state.duplicate;
+      const duplicate = this.state.duplicate;
       const actualColumns = this.state.columns;
       const actualCards = this.state.cards;
-      const newColumnTitle = 'v' + dupl + '_' + name;
+      const newColumnTitle = 'v' + duplicate + '_' + name;
       actualColumns.splice(actualColumns.indexOf(name) + 1, 0, newColumnTitle);
       actualCards.map(card => {
         if (card.title === name) {
@@ -93,7 +93,7 @@ export default class Board extends React.Component {
       this.setState({
         columns: actualColumns,
         cardsInBoard: actualCards,
-        duplicate: dupl + 1
+        duplicate: duplicate + 1
       });
     }
   
@@ -124,12 +124,13 @@ export default class Board extends React.Component {
   
     editTitle(name, newTitle) {
       const actualCards = this.state.cards;
-      const actualColumns = this.state.columns
-      actualColumns[actualColumns.indexOf(name)] = newTitle;
+      const actualColumns = this.state.columns;
+      const index = actualColumns.indexOf(name);
+      actualColumns[index] = newTitle;
       localStorage.setItem('columnsInBoard', actualColumns);
-      for (const i in actualCards) {
-        if (actualCards[i].title === name) {
-          actualCards[i].title = newTitle;
+      for (const card in actualCards) {
+        if (actualCards[card].title === name) {
+          actualCards[card].title = newTitle;
         }
       }
       localStorage.setItem('cardsInBoard', JSON.stringify(actualCards));
@@ -139,26 +140,8 @@ export default class Board extends React.Component {
       });
     }
   
-    //VER SI VA ACA
-    editCard(title, name, newCard) {
-      const actualCards = this.state.cards
-      if (newCard !== '' && newCard !== null) {
-        const card = { name: newCard, title: title, visible: true };
-        let index;
-        for (const i in actualCards) {
-          if (actualCards[i].title === title && actualCards[i].name === name) {
-            index = i;
-          }
-        }
-        actualCards[index] = card;
-        localStorage.setItem('cardsInBoard', JSON.stringify(actualCards));
-        this.setState({
-          cards: actualCards
-        });
-      }
-    }
   
-    onDrop = (ev, newColumn) => {
+    onDrop = (event, newColumn) => {
       const newList = this.state.columns;
       const column = localStorage.getItem('ColumnDrag');
       const indexActual = this.state.columns.indexOf(column);
@@ -182,17 +165,13 @@ export default class Board extends React.Component {
     };
   
     openModal(editType, name) {
-      open(editType, name);
+      open('modal',editType, name);
     }
   
     save() {
       const editElement = JSON.parse(localStorage.getItem('Edit'));
       const edit = document.getElementById('edit');
-      if (editElement.editType === 'EditTitle') {
-        this.editTitle(editElement.name, edit.value);
-      } else if (editElement.editType === 'EditCard') {
-        this.editCard(editElement.name, editElement.cardName, edit.value);
-      }
+      this.editTitle(editElement.name, edit.value);
       document.getElementById('modal').style.display = 'none';
       edit.value = '';
     }
@@ -203,8 +182,8 @@ export default class Board extends React.Component {
       edit.value = '';
     }
   
-    onDragOver = ev => {
-      ev.preventDefault();
+    onDragOver = event => {
+        event.preventDefault();
     };
   
     render() {
