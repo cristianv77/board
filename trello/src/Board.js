@@ -44,7 +44,9 @@ export default class Board extends React.Component {
   addColumn() {
     const actualColumns = this.state.columns;
     const newColumnTitle = document.getElementById("newColumn").value;
-    actualColumns.push(newColumnTitle);
+    if (!actualColumns.includes(newColumnTitle)){
+      actualColumns.push(newColumnTitle);
+    }
     localStorage.setItem("columnsInBoard", actualColumns);
     this.setState({
       columns: actualColumns
