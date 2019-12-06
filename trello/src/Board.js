@@ -44,7 +44,9 @@ export default class Board extends React.Component {
   addColumn() {
     const actualColumns = this.state.columns;
     const newColumnTitle = document.getElementById("newColumn").value;
-    actualColumns.push(newColumnTitle);
+    if (!actualColumns.includes(newColumnTitle)){
+      actualColumns.push(newColumnTitle);
+    }
     localStorage.setItem("columnsInBoard", actualColumns);
     this.setState({
       columns: actualColumns
@@ -187,7 +189,7 @@ export default class Board extends React.Component {
     });
 
     return (
-      <div className="container-drag, board">
+      <div className="container-drag, board" key={Math.random()}>
         <div className="board-info">
           <input
             onChange={this.searchCards}
@@ -205,7 +207,7 @@ export default class Board extends React.Component {
             <button type="submit">{"+"}</button>
           </form>
         </div>
-        <div className="columns" id="columns">
+        <div className="columns" id="columns" key={Math.random()}>
           <div className="column-board" key={Math.random()}>
             <div className="column-dropzone" key={Math.random()}>
               <div

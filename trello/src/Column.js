@@ -119,11 +119,13 @@ export default class Column extends React.Component {
     const actualCards = JSON.parse(localStorage.getItem("cardsInBoard"));
     const actualColumns = localStorage.getItem("columnsInBoard").split(",");
     const index = actualColumns.indexOf(name);
-    actualColumns[index] = newTitle;
-    localStorage.setItem("columnsInBoard", actualColumns);
-    for (const card in actualCards) {
-      if (actualCards[card].title === name) {
-        actualCards[card].title = newTitle;
+    if (!actualColumns.includes(newTitle)) {
+      actualColumns[index] = newTitle;
+      localStorage.setItem("columnsInBoard", actualColumns);
+      for (const card in actualCards) {
+        if (actualCards[card].title === name) {
+          actualCards[card].title = newTitle;
+        }
       }
     }
     localStorage.setItem("cardsInBoard", JSON.stringify(actualCards));
