@@ -133,7 +133,7 @@ export default class Board extends React.Component {
     render() {
       //It returns a list of cards of a column in particular.
       const ListOfCards = name => {
-        const cardsInBoard = this.state.cards;
+        const cardsInBoard = JSON.parse(localStorage.getItem('cardsInBoard').split(','));
         const list = [];
         cardsInBoard.map(card => {
           if (card.title === name && card.visible) {
