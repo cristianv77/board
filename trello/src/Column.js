@@ -77,7 +77,7 @@ export default class Column extends React.Component {
     localStorage.setItem("ColumnDrag", column);
   };
 
-  onDragEnd = (event, name, column) => {
+  onDragEnd = (event, name) => {
     const actualCards = this.state.cards;
     actualCards.splice(actualCards.indexOf(name), 1);
     this.setState({
@@ -130,7 +130,7 @@ export default class Column extends React.Component {
     window.location.reload(false);
   }
 
-  //MODAL METHODS  
+  //MODAL METHODS
   openModal(editType, name) {
     open("modal", editType, name);
   }
@@ -154,7 +154,7 @@ export default class Column extends React.Component {
         <div className="board-row" key={Math.random()}>
           <div
             draggable="true"
-            onDragEnd={event => this.onDragEnd(event, name, this.props.title)}
+            onDragEnd={event => this.onDragEnd(event, name)}
             onDragStart={event =>
               this.onDragStart(event, name, this.props.title)
             }
@@ -180,7 +180,7 @@ export default class Column extends React.Component {
     };
     const idAddCard = "AddCard" + this.props.title;
     return (
-      <div className='column-but'>
+      <div className="column-but">
         <button
           onClick={() => this.openModal("EditTitle", this.props.title)}
           id="BtnActions"

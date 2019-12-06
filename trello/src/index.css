@@ -1,207 +1,204 @@
 body {
-    font: 14px "Century Gothic", Futura, sans-serif;
-    margin: 20px;
-    background-color: #5d5c61;
-  }
-  
-  ol, ul {
-    padding-left: 30px;
-  }
-  
-  .column-board {
-    height:100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .column-dropzone {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .column-but {
-    display:flex;
-    flex-direction: column;
-  }
-  
-
-  .titleColumn {
-    margin-bottom: 10px;
-    color: #ec4858
-  }
-  
-  .square {
-    background: #ec4858;
-    border: 2px solid #5d5c61;
-    color: #5d5c61;
-    border-radius: 5px;
-    float: left;
-    font-size: 24px;
-    line-height: 34px;
-    height: 100px;
-    margin-right: 1px;
-    margin-top: 1px;
-    margin-left:20px;
-    padding: 0;
-    text-align: center;
-    width: 110px;
-  }
-  
-  .column {
-    background: #5d5c61;
-    border: 2px solid #ec4858;
-    border-radius: 5px;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    margin-left: 20px;
-    padding: 0;
-    text-align: center;
-    width: 150px;
-  }
-
-  .column-drop {
-    background: #5d5c61;
-    float: left;
-    height: 100%;
-    margin-right: -1px;
-    margin-top: -1px;
-    margin-left: 20px;
-    padding: 0;
-    text-align: center;
-    width: 50px;
-  }
-
-  .column-drop-first {
-    background: #5d5c61;
-    float: left;
-    height: 500px;
-    margin-right: -1px;
-    margin-top: -1px;
-    margin-left: 20px;
-    padding: 0;
-    text-align: center;
-    width: 50px;
-  }
-  
-  .board {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .columns {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .board-info {
-    margin-left: 30%;
-    display: flex;
-    flex-direction: row;
-  }
-
-  .board-row {
-    border-top:2px solid #ec4858;
-  }
-  
-  .buttons-column {
-      width: 150px;
-      margin-left: 20px;
-      margin-right: 20px;
-  }
-
-  button {
-    color: #ec4858;
-    background-color: #5d5c61;
-    outline-style: none;
-    border-radius: 5px;
-    border: 2px solid #ec4858;
-    text-decoration: none;
-    text-align: center;
-    height: 30px;
-  }
-
-  #button-add-card {
-    width:100%;
-    color: #5d5c61;
-    background-color: #ec4858;
-    padding-bottom:0%;
-  }
-
-  #search {
-    margin-right: 100px;
-  }
-
-  #newColumn {
-    height: 30px;
-    margin-right: 10px;
-  }
-
-  .addCardInput {
-    margin-top: 50px;
-    width: 145px;
-    height: 30px;
-   
-  }
-
-  #BtnActions{
-    margin: 2px;
-  }
-
-  .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal-content {
-    background-color: #ec4858;
-    margin: auto;
-    padding: 20px;
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-  }
-  .modal-header {
-    background-color: #ec4858;
-    margin: auto;
-    padding: 20px;
-    text-align: right;
-    width: 60%;
-    display: flex;
-    flex-direction: column;
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+  background-color: #5d5c61;
 }
-  
-  /* The Close Button */
-  .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
 
-  /*.column-board {
+ol,
+ul {
+  padding-left: 30px;
+}
+
+.column-board {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-dropzone {
+  display: flex;
+  flex-direction: row;
+}
+
+.column-but {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleColumn {
+  margin-bottom: 10px;
+  color: #ec4858;
+}
+
+.square {
+  background: #ec4858;
+  border: 2px solid #5d5c61;
+  color: #5d5c61;
+  border-radius: 5px;
+  float: left;
+  font-size: 24px;
+  line-height: 34px;
+  height: 100px;
+  margin-right: 1px;
+  margin-top: 1px;
+  margin-left: 20px;
+  padding: 0;
+  text-align: center;
+  width: 110px;
+}
+
+.column {
+  background: #5d5c61;
+  border: 2px solid #ec4858;
+  border-radius: 5px;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  margin-left: 20px;
+  padding: 0;
+  text-align: center;
+  width: 150px;
+}
+
+.column-drop {
+  background: #5d5c61;
+  float: left;
+  height: 100%;
+  margin-right: -1px;
+  margin-top: -1px;
+  margin-left: 20px;
+  padding: 0;
+  text-align: center;
+  width: 50px;
+}
+
+.column-drop-first {
+  background: #5d5c61;
+  float: left;
+  height: 500px;
+  margin-right: -1px;
+  margin-top: -1px;
+  margin-left: 20px;
+  padding: 0;
+  text-align: center;
+  width: 50px;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+}
+
+.columns {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+.board-info {
+  margin-left: 30%;
+  display: flex;
+  flex-direction: row;
+}
+
+.board-row {
+  border-top: 2px solid #ec4858;
+}
+
+.buttons-column {
+  width: 150px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+button {
+  color: #ec4858;
+  background-color: #5d5c61;
+  outline-style: none;
+  border-radius: 5px;
+  border: 2px solid #ec4858;
+  text-decoration: none;
+  text-align: center;
+  height: 30px;
+}
+
+#button-add-card {
+  width: 100%;
+  color: #5d5c61;
+  background-color: #ec4858;
+  padding-bottom: 0%;
+}
+
+#search {
+  margin-right: 100px;
+}
+
+#newColumn {
+  height: 30px;
+  margin-right: 10px;
+}
+
+.addCardInput {
+  margin-top: 50px;
+  width: 145px;
+  height: 30px;
+}
+
+#BtnActions {
+  margin: 2px;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #ec4858;
+  margin: auto;
+  padding: 20px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+.modal-header {
+  background-color: #ec4858;
+  margin: auto;
+  padding: 20px;
+  text-align: right;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*.column-board {
     display:flex;
   }*/
-
-  
