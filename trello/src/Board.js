@@ -22,7 +22,9 @@ export default class Board extends React.Component {
   //Search the word from the input element on the cards of the board. If it is found, the visibility is true. Else the visibility of the card is false
   searchCards() {
     const searchWords = document.getElementById("search").value.toLowerCase();
-    const actualCards = this.state.cards;
+    const actualCards = JSON.parse(
+      localStorage.getItem("cardsInBoard").split(",")
+    );
     actualCards.map(card => {
       const nameLow = card.name.toLowerCase();
       if (nameLow.includes(searchWords)) {
